@@ -96,6 +96,11 @@ Academic Muse utilizes various **KendoReact** components to deliver a polished a
 8. **@progress/kendo-react-notification**  
    - **Notification**: Displays timely alerts or confirmations (e.g., success messages, reminders) to the user in a non-intrusive manner.
 
+9. **progress/kendo-react-progressbars**
+   - **ProgressBar**: Used for displaying progress indicators (such as tracking the simulated progress while generating content). Its styling (e.g., green color) can be customized via inline styles or CSS.
+
+10. **progress/kendo-react-labels**
+    - **Label**: Offers styled label components to display textual hints or form field labels consistently.
 All of these components work together with **@progress/kendo-theme-default** for a cohesive look and feel, ensuring that Academic Muse maintains a consistent, professional, and accessible UI.
 
 ---
