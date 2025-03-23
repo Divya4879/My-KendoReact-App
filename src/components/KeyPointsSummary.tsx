@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { DropDownList, DropDownListChangeEvent } from '@progress/kendo-react-dropdowns';
 import { Input, InputChangeEvent } from '@progress/kendo-react-inputs';
 import { Button } from '@progress/kendo-react-buttons';
+import { Label } from "@progress/kendo-react-labels";
+import { ProgressBar } from "@progress/kendo-react-progressbars";
 
 interface AcademicLevel {
   id: string;
@@ -82,6 +84,8 @@ const TopicGuide: React.FC = () => {
   const [content, setContent] = useState<string>(''); // Initially empty
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
+  // New state for simulated progress
+  const [progress, setProgress] = useState<number>(0);
 
   const handleLevelChange = (e: DropDownListChangeEvent) => {
     setSelectedLevel(e.target.value as AcademicLevel);
@@ -99,11 +103,20 @@ const TopicGuide: React.FC = () => {
     }
     setLoading(true);
     setError('');
+    setProgress(0);
+    // Simulate progress: increment by 5 every 300ms up to 95%
+    const timer = setInterval(() => {
+      setProgress(prev => (prev < 95 ? prev + 5 : prev));
+    }, 300);
+
     try {
       const result = await generateLearningHacks(topicName, selectedLevel.name);
+      clearInterval(timer);
+      setProgress(100);
       setContent(result);
       localStorage.setItem('topicContent', result);
     } catch (err: unknown) {
+      clearInterval(timer);
       console.error('Error generating content:', err);
       setError(err instanceof Error ? err.message : 'An unknown error occurred.');
     } finally {
@@ -116,7 +129,7 @@ const TopicGuide: React.FC = () => {
       <h2 style={{ margin: "1.5rem 18vw", fontSize: "2rem", fontWeight: "bold" }}>Key Takeaways</h2>
       <form onSubmit={handleSubmit} style={{ marginBottom: '1rem' }}>
         <div style={{ marginBottom: '1rem' }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem' }}>Academic Level:</label>
+          <Label style={{ display: 'block', marginBottom: '0.5rem' }}>Academic Level:</Label>
           <DropDownList
             data={academicLevels}
             textField="name"
@@ -156,14 +169,18 @@ const TopicGuide: React.FC = () => {
           {error}
         </div>
       )}
-      {/* Explanation Container with Close Button */}
+      {/* Simulated ProgressBar with green color */}
+      {loading && (
+        <div style={{ marginBottom: '1rem' }}>
+          <ProgressBar value={progress} style={{ backgroundColor: 'green' }} />
+        </div>
+      )}
+      {/* Content Container with Close Button */}
       <div
         style={{
           position: 'relative',
-          
           height: content ? '60vh' : '0',
           transition: 'height 0.5s ease',
-          
           borderRadius: '12px',
           lineHeight: '1.4',
           paddingBottom: '2rem'

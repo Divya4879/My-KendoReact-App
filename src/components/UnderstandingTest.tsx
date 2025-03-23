@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextArea, TextAreaChangeEvent } from '@progress/kendo-react-inputs';
 import { Button } from '@progress/kendo-react-buttons';
 import { evaluateUnderstanding } from '../services/genAiService';
+import { Label } from "@progress/kendo-react-labels";
+import { ProgressBar } from "@progress/kendo-react-progressbars";
 
 const UnderstandingTest: React.FC = () => {
   const [explanationInput, setExplanationInput] = useState<string>('');
-  const [feedback, setFeedback] = useState<string>(''); // Holds the API response
+  const [feedback, setFeedback] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  const [progress, setProgress] = useState<number>(0);
 
   const handleInputChange = (e: TextAreaChangeEvent) => {
     setExplanationInput(e.target.value ?? '');
@@ -19,19 +22,29 @@ const UnderstandingTest: React.FC = () => {
       return;
     }
     setLoading(true);
+    setProgress(10); // Start progress
+
     try {
+      const progressInterval = setInterval(() => {
+        setProgress(prev => (prev < 90 ? prev + 10 : prev));
+      }, 500);
+
       const result = await evaluateUnderstanding(explanationInput);
+      clearInterval(progressInterval);
+      setProgress(100); // Completion state
       setFeedback(result);
       localStorage.setItem('understandingFeedback', result);
     } catch (error) {
       console.error('Error evaluating understanding:', error);
       alert(error);
     } finally {
-      setLoading(false);
+      setTimeout(() => {
+        setLoading(false);
+        setProgress(0);
+      }, 1000);
     }
   };
 
-  // Formats the feedback by converting **text** to a styled span.
   const formatFeedback = (text: string): string => {
     return text.replace(/\*\*(.*?)\*\*/g, '<span style="font-size:150%; font-weight:bold;">$1</span>');
   };
@@ -41,9 +54,9 @@ const UnderstandingTest: React.FC = () => {
       <h2 style={{ margin: "1.5rem 20vw", fontSize: "2rem", fontWeight: "bold" }}>Test & Thrive</h2>
       <form onSubmit={handleSubmit} style={{ marginBottom: '1rem' }}>
         <div style={{ marginBottom: '1rem' }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem' }}>
+          <Label style={{ display: 'block', marginBottom: '0.5rem' }}>
             Explain the topic (up to 3000 words) and get personalized feedback:
-          </label>
+          </Label>
           <TextArea
             value={explanationInput}
             onChange={handleInputChange}
@@ -73,8 +86,8 @@ const UnderstandingTest: React.FC = () => {
             style={{
               borderRadius: "4px",
               padding: "0.75rem 1.5rem",
-              margin: "1rem auto",  // Centers the button horizontally
-              display: "block",      // Required for margin auto centering
+              margin: "1rem auto",
+              display: "block",
               fontWeight: "bold",
               fontSize: "1.2rem",
               transition: "background-color 0.3s ease, color 0.3s ease",
@@ -84,14 +97,22 @@ const UnderstandingTest: React.FC = () => {
           </Button>
         </div>
       </form>
-      {/* Feedback Container with Close Button */}
+
+      {/* Progress Bar */}
+      {loading && (
+        <ProgressBar
+          value={progress}
+          style={{ height: '10px', borderRadius: '5px', margin: '1rem 0', backgroundColor: 'green'  }}
+          animation
+        />
+      )}
+
+      {/* Feedback Container */}
       <div
         style={{
           position: 'relative',
-          
           height: feedback ? '60vh' : '0',
           transition: 'height 0.5s ease',
-          
           borderRadius: '12px',
           lineHeight: '1.4',
           paddingBottom: '2rem'
@@ -133,3 +154,4 @@ const UnderstandingTest: React.FC = () => {
 };
 
 export default UnderstandingTest;
+
