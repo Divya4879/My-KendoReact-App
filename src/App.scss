@@ -1,3 +1,87 @@
+@import '~@progress/kendo-theme-default/scss/all';
+
+/*-----------------------------------------------------------
+  Global Variables (Green Palette)
+-----------------------------------------------------------*/
+/* Light Mode Variables */
+:root {
+  // Header & Footer
+  --header-bg: #c8e6c9;         /* Soft light green for header */
+  --header-text: #1b5e20;       /* Deep green for header text */
+  --footer-bg: #c8e6c8;         /* Light green for footer */
+  --footer-text: #1b5e20;       /* Deep green for footer text */
+
+  // Background & Text
+  --bg-color: #f1f8e9;          /* Off-white greenish background */
+  --text-color: #1b5e20;        /* Deep green text */
+  --link-color: #388e3c;        /* Medium green for links */
+
+  // Buttons & Primary
+  --button-bg: #a5d6a7;         /* Soft green for button backgrounds */
+  --button-text: #1b5e20;       /* Deep green for button text */
+  --primary-color: #2ecc71;     /* Vibrant green for primary accents (e.g., highlights, hover states) */
+
+  // Window/Modal & Popup
+  --window-bg: #e6f2e6;         /* Very light green for modals/windows */
+  --window-border: #b3d7b3;     /* Light green border */
+  --popup-bg: #ffffff;          /* White background for popups */
+  --popup-border: #b3d7b3;      /* Light border for popups */
+
+  // Notification
+  --notification-bg: #f8f8f8;   /* Light background for notifications */
+  --notification-border: #ccc;  /* Notification border */
+  --notification-text: #1b5e20; /* Deep green text for notifications */
+
+  // Chart
+  --chart-bg: #ffffff;          /* Chart background */
+  --chart-border: #ccc;         /* Chart border */
+  --chart-axis-label: #1b5e20;   /* Deep green for axis labels */
+  --chart-series-fill: #2ecc71;  /* Primary green for series fill */
+  --chart-series-stroke: #27ae60;/* Slightly darker green for series stroke */
+}
+
+/* Dark Mode Variables */
+.dark-mode {
+  --header-bg: #2e7d32;         /* Darker green for header */
+  --header-text: #e8f5e9;         /* Light green for header text */
+  --footer-bg: #2d473a;         /* Dark green for footer */
+  --footer-text: #e8f5e9;         /* Light green for footer text */
+
+  --bg-color: #041f0c;          /* Very dark green background */
+  --text-color: #e8f5e9;        /* Light green text */
+  --link-color: #81c784;        /* Light green for links */
+
+  --button-bg: #388e3c;         /* Rich green for buttons */
+  --button-text: #e8f5e9;       /* Light green for button text */
+  --primary-color: #27ae60;     /* Darker primary green for accents */
+
+  --window-bg: #2b3e2b;         /* Dark green for modals/windows */
+  --window-border: #3e5d3e;     /* Dark border for modals/windows */
+  --popup-bg: #2b3e2b;          /* Dark popup background */
+  --popup-border: #3e5d3e;      /* Dark popup border */
+
+  --notification-bg: #1a1a1a;   /* Dark background for notifications */
+  --notification-border: #444;  /* Dark notification border */
+  --notification-text: #e8f5e9;  /* Light notification text */
+
+  --chart-bg: #1a1a1a;          /* Dark chart background */
+  --chart-border: #444;         /* Dark chart border */
+  --chart-axis-label: #e8f5e9;   /* Light axis labels */
+  --chart-series-fill: #27ae60;  /* Dark primary green for series fill */
+  --chart-series-stroke: #2e7d32;/* Even darker stroke */
+}
+
+/*-----------------------------------------------------------
+  Global Styles & Layout
+-----------------------------------------------------------*/
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
 .App {
   text-align: center;
 }
@@ -8,12 +92,212 @@
 }
 
 .App-header {
-  background-color: #151950;
-  min-height: 100vh;
+  background-color: var(--header-bg);
+  min-height: 50vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: var(--header-text);
+  padding: 1rem;
+}
+
+
+
+.main-content {
+  display: flex;
+  width: 100vw;
+}
+
+.view-container {
+  padding: 1rem;
+  max-width: 1000px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: var(--footer-bg);
+  color: var(--footer-text);
+  text-align: center;
+  padding: 0.5rem 0;
+  box-sizing: border-box;
+}
+
+/*-----------------------------------------------------------
+  KendoReact Component Customizations
+-----------------------------------------------------------*/
+
+/* Window & Dialog */
+.k-window,
+.k-dialog {
+  border: 1px solid var(--window-border);
+  border-radius: 8px;
+  background-color: var(--window-bg);
+  color: var(--text-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Dialog Actions Bar */
+.k-dialog .k-dialog-actionsbar {
+  text-align: right;
+  padding: 1rem;
+  background-color: var(--window-bg);
+}
+
+/* DropDownList */
+.k-dropdownlist {
+  border: 1px solid var(--window-border);
+  border-radius: 4px;
+  padding: 0.5rem;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-size: 1rem;
+}
+
+/* Input, NumericTextBox & TextArea */
+.k-textbox,
+.k-numerictextbox input,
+.k-textarea {
+  border: 1px solid var(--window-border);
+  border-radius: 4px;
+  padding: 0.5rem;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-size: 1rem;
+}
+
+/* Button */
+.k-button {
+  border: none;
+  border-radius: 4px;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-family: inherit;
+  font-size: 1rem;
+  display: block;
+  margin: 0 auto;
+
+}
+
+.k-button:hover {
+  background-color: rgb(159, 255, 159);
+  color: rgb(0, 0, 0);
+}
+
+/* Popup */
+.k-popup {
+  border: 1px solid var(--popup-border);
+  border-radius: 4px;
+  background-color: var(--popup-bg);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* TimePicker */
+.k-timepicker .k-textbox {
+  border: 1px solid var(--window-border);
+  border-radius: 4px;
+  padding: 0.5rem;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* Notification */
+.k-notification {
+  border: 1px solid var(--notification-border);
+  border-radius: 4px;
+  padding: 1rem;
+  background-color: var(--notification-bg);
+  color: var(--notification-text);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 1rem;
+}
+
+/* Chart & Sub-components */
+.k-chart {
+  background-color: var(--chart-bg);
+  border: 1px solid var(--chart-border);
+}
+
+.k-chart .k-chart-category-axis .k-axis-labels,
+.k-chart .k-chart-value-axis .k-axis-labels {
+  color: var(--chart-axis-label);
+  font-size: 0.9rem;
+}
+
+.k-chart .k-chart-series .k-chart-series-item {
+  stroke: var(--chart-series-stroke);
+  fill: var(--chart-series-fill);
+}
+
+/*-----------------------------------------------------------
+  Additional Global Styles & Helpers
+-----------------------------------------------------------*/
+label {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  display: block;
+  font-size: 1rem;
+}
+
+input.k-textbox {
+  margin-top: 0.25rem;
+  padding: 0.5rem;
+  border: 1px solid var(--window-border);
+  border-radius: 4px;
+}
+
+/* Highlight Text */
+.highlight {
+  color: var(--primary-color);
+}
+
+/* Mobile Responsive Styles */
+@media only screen and (max-width: 768px) {
+  .App-header {
+    flex-direction: column;
+    padding: 1rem;
+    font-size: calc(10px + 2vmin);
+  }
+
+  .main-content {
+    flex-direction: column;
+  }
+
+  .view-container {
+    padding: 0.5rem;
+    max-width: 100%;
+    width: 100%;
+    margin: 0 1rem;
+  }
+
+  footer {
+    font-size: 0.9rem;
+  }
+
+  /* Adjust KendoReact components for smaller screens */
+  .k-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .k-dropdownlist,
+  .k-textbox,
+  .k-numerictextbox input,
+  .k-textarea,
+  .k-timepicker .k-textbox {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .k-chart .k-chart-category-axis .k-axis-labels,
+  .k-chart .k-chart-value-axis .k-axis-labels {
+    font-size: 0.8rem;
+  }
 }
