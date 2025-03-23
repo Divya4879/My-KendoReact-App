@@ -98,7 +98,7 @@ const TopicGuide: React.FC = () => {
     // Simulate progress: increment by 5 every 300ms up to 95%
     const timer = setInterval(() => {
       setProgress(prev => (prev < 95 ? prev + 10 : prev));
-    }, 100);
+    }, 200);
     
     try {
       const result = await generateTopicExplanation(topicName, selectedLevel.name);
