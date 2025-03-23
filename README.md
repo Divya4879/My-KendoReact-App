@@ -34,28 +34,29 @@ Enhance your study routine with:
 ## Features
 
 1. **Topic Guide**  
-   - Enter a topic and desired academic level to receive a clear, concise explanation.
+   - Enter a topic and select your academic level to receive a clear, concise explanation.
 
 2. **Test & Thrive**  
-   - Evaluate your understanding of a topic by generating quick quizzes and practice questions.
+   - Evaluate your understanding by writing out what you know about a topic. The AI then provides a SWOT analysis along with key takeaways and personalized feedback for improvement.
 
 3. **Key Takeaways**  
-   - Summarize main points or insights from the content you’re studying to reinforce memory retention.
+   - Summarize the main insights of your chosen topic, tailored to your academic level, to reinforce memory retention.
 
 4. **Pomodoro Timer**  
-   - Stay productive by breaking your work sessions into focused intervals, complete with break reminders.
+   - Boost productivity by breaking your work into focused intervals. Customize the timer with durations ranging from 25 minutes up to 2 hours.
 
 5. **Daily Study Cue**  
-   - Receive a daily prompt or hint that encourages continuous learning and progress.
+   - Receive daily reminders at up to three designated times—only when you’re on the website—to keep you on track.
 
 6. **Weekly Study Pulse**  
-   - Visualize your weekly study sessions via an interactive chart to gauge consistency and momentum.
+   - Visualize your weekly study sessions with a bar graph to gauge consistency and momentum.
 
 7. **Study Scheduler**  
-   - Plan your upcoming sessions and tasks, ensuring you never miss a deadline or important milestone.
+   - Plan your sessions and tasks for the day, and view your complete session history, including completed and missed sessions.
 
-8. **Responsive & Modern Design**  
-   - Experience a seamless interface across all devices with a clean, green-themed UI.
+8. **Dark & Light Themes with Mobile Responsiveness**  
+   - Enjoy a seamless experience across devices with a clean, green-themed UI. Switch between dark and light modes effortlessly on our mobile-friendly, responsive site.
+
 
 ---
 
@@ -102,9 +103,9 @@ All of these components work together with **@progress/kendo-theme-default** for
 ## Technologies
 
 - **React:** Powers the interactive front-end and component-based architecture.
-- **SCSS/CSS:** Manages a cohesive and scalable style system.
+- **SCSS & CSS:** Manages a cohesive and scalable style system.
 - **Netlify:** Offers reliable hosting and streamlined continuous deployment.
-- **AI/LLM Integration:** Provides automated content generation for explanations, quizzes, and summaries (e.g., for the Topic Guide and Test & Thrive features).
+- **AI Integration:** Provides automated content generation for explanations, quizzes, and summaries (e.g., for the Topic Guide and Test & Thrive features).
 
 ---
 
@@ -113,7 +114,7 @@ All of these components work together with **@progress/kendo-theme-default** for
 1. **Clone the Repository:**
 
    ```
-   git clone https://github.com/your-username/academic-muse.git
+   git clone https://github.com/Divya4879/academic-muse.git
    cd academic-muse
    ```
 2. Install Dependencies:
@@ -131,6 +132,7 @@ npm start
 ```
 Your application will be accessible at [http://localhost:3000]().
 
+---
 ## Deployment
 Academic Muse is deployed via Netlify for quick and efficient hosting:
 
@@ -154,6 +156,7 @@ netlify deploy --prod
 
 Follow the prompts to select the build folder. Your site will then be live on Netlify.
 
+---
 ## Automatic Deployment
 If you wish to reflect local changes automatically on your Netlify site:
 
@@ -192,17 +195,16 @@ npm run watch-deploy
 
 This script rebuilds and redeploys automatically whenever files in src change.
 
+---
 ## Usage
-Once deployed, Academic Muse allows you to:
+Once deployed, Academic Muse empowers you to:
 
-- Generate Topic Explanations: Quickly grasp complex topics by selecting your preferred academic level.
+- **Generate Topic Explanations:** Select your topic and academic level to receive clear, tailored explanations that simplify complex concepts.
+- **Test Your Knowledge:** Write out your understanding of a topic and receive a detailed SWOT analysis, feedback, and key takeaways to reinforce learning.
+- **Stay Organized:** Schedule daily sessions, track your study history with visual weekly insights, and manage your tasks effortlessly.
+- **Manage Focus:** Boost productivity with a customizable Pomodoro Timer and timely study cues to keep you on track.
 
-- Test Your Knowledge: Use the quiz feature to challenge your understanding and reinforce learning.
-
-- Stay Organized: Track study sessions, schedule upcoming tasks, and review your weekly progress at a glance.
-
-- Manage Focus: Use the built-in Pomodoro Timer to stay productive and maintain work-life balance.
-
+---
 ## Contributing
 Contributions are welcome to make Academic Muse even better!
 
