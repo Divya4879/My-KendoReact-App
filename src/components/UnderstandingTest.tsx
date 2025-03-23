@@ -22,7 +22,7 @@ const UnderstandingTest: React.FC = () => {
       return;
     }
     setLoading(true);
-    setProgress(10); // Start progress
+    setProgress(10); 
 
     try {
       const progressInterval = setInterval(() => {
@@ -31,7 +31,7 @@ const UnderstandingTest: React.FC = () => {
 
       const result = await evaluateUnderstanding(explanationInput);
       clearInterval(progressInterval);
-      setProgress(100); // Completion state
+      setProgress(100); 
       setFeedback(result);
       localStorage.setItem('understandingFeedback', result);
     } catch (error) {
@@ -98,7 +98,6 @@ const UnderstandingTest: React.FC = () => {
         </div>
       </form>
 
-      {/* Progress Bar */}
       {loading && (
         <ProgressBar
           value={progress}
@@ -107,7 +106,6 @@ const UnderstandingTest: React.FC = () => {
         />
       )}
 
-      {/* Feedback Container */}
       <div
         style={{
           position: 'relative',

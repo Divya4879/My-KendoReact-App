@@ -1,4 +1,3 @@
-// src/components/TopicGuide.tsx
 import React, { useState } from 'react';
 import { DropDownList, DropDownListChangeEvent } from '@progress/kendo-react-dropdowns';
 import { Input, InputChangeEvent } from '@progress/kendo-react-inputs';
@@ -40,9 +39,9 @@ const generateLearningHacks = async (topic: string, level: string): Promise<stri
   4. Learning Hacks: Suggest memory aids or study techniques to master this topic.
   5. Additional Resources: Recommend relevant & free courses as well as official documentation and even YouTube Tutorial links with hyperlinks in the format - Platform: Course Name (this course name is a hyperlink which links to the course).`;
 
-  // Build the payload according to the Chat Completions API format
+  
   const payload = {
-    model: "llama3-8b-8192", // Replace with the model specified in your API documentation
+    model: "llama3-8b-8192", 
     messages: [
       {
         role: "user",
@@ -71,20 +70,19 @@ const generateLearningHacks = async (topic: string, level: string): Promise<stri
   return data?.choices?.[0]?.message?.content || '';
 };
 
-// Helper function to replace **text** with a styled span.
 const formatContent = (text: string): string => {
   return text
     .replace(/\*\*(.*?)\*\*/g, '<span style="font-size:110%; font-weight:bold;">$1</span>')
     .replace(/###/g, '');
 };
 
-const TopicGuide: React.FC = () => {
+const KeyPointsSummary: React.FC = () => {
   const [selectedLevel, setSelectedLevel] = useState<AcademicLevel>(academicLevels[0]);
   const [topicName, setTopicName] = useState<string>('');
   const [content, setContent] = useState<string>(''); // Initially empty
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
-  // New state for simulated progress
+  // State for simulated progress
   const [progress, setProgress] = useState<number>(0);
 
   const handleLevelChange = (e: DropDownListChangeEvent) => {
@@ -153,8 +151,8 @@ const TopicGuide: React.FC = () => {
             style={{
               borderRadius: "4px",
               padding: "0.75rem 1.5rem",
-              margin: "1rem auto", // Centers the button horizontally
-              display: "block",     // Required for margin auto centering
+              margin: "1rem auto", 
+              display: "block",     
               fontWeight: "bold",
               fontSize: "1.2rem",
               transition: "background-color 0.3s ease, color 0.3s ease",
@@ -175,7 +173,7 @@ const TopicGuide: React.FC = () => {
           <ProgressBar value={progress} style={{ backgroundColor: 'green' }} />
         </div>
       )}
-      {/* Content Container with Close Button */}
+     
       <div
         style={{
           position: 'relative',
@@ -222,4 +220,4 @@ const TopicGuide: React.FC = () => {
   );
 };
 
-export default TopicGuide;
+export default KeyPointsSummary;

@@ -1,4 +1,3 @@
-// src/components/StudyScheduler.tsx
 import React, { useState, useEffect } from 'react';
 import { Button } from '@progress/kendo-react-buttons';
 import { Dialog, DialogActionsBar } from '@progress/kendo-react-dialogs';
@@ -8,15 +7,14 @@ import '@progress/kendo-theme-default/dist/all.css';
 
 interface Session {
   id: number;
-  start: number; // Unix timestamp in ms
-  end: number;   // Unix timestamp in ms
+  start: number; 
+  end: number;   
   status: 'upcoming' | 'reminder' | 'ongoing' | 'completed' | 'skipped';
   remindersCount: number;
 }
 
 const STORAGE_KEY = 'studySessions';
 
-// Helper: Combine the selected time with today's date (only current day allowed)
 const combineWithToday = (time: Date): Date => {
   const now = new Date();
   return new Date(
@@ -30,7 +28,6 @@ const combineWithToday = (time: Date): Date => {
 };
 
 const StudyScheduler: React.FC = () => {
-  // Load sessions from localStorage if available.
   const [sessions, setSessions] = useState<Session[]>(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
     return stored ? JSON.parse(stored) : [];
@@ -40,18 +37,15 @@ const StudyScheduler: React.FC = () => {
   const [newSessionEnd, setNewSessionEnd] = useState<Date | null>(null);
   const [notificationSession, setNotificationSession] = useState<Session | null>(null);
 
-  // Persist sessions to localStorage whenever they change.
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(sessions));
   }, [sessions]);
 
-  // Update session statuses every minute.
   useEffect(() => {
     const interval = setInterval(() => {
       const now = Date.now();
       setSessions((prevSessions) =>
         prevSessions.map((session) => {
-          // If session is upcoming and within 5 minutes before start:
           if (
             session.status === 'upcoming' &&
             now >= session.start - 5 * 60 * 1000 &&
@@ -59,7 +53,6 @@ const StudyScheduler: React.FC = () => {
           ) {
             return { ...session, status: 'reminder' };
           }
-          // If session is ongoing and past its end time, mark as completed.
           if (session.status === 'ongoing' && now >= session.end) {
             return { ...session, status: 'completed' };
           }
@@ -70,7 +63,6 @@ const StudyScheduler: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Check for sessions needing a reminder.
   useEffect(() => {
     const now = Date.now();
     const sessionForReminder = sessions.find(
@@ -80,7 +72,6 @@ const StudyScheduler: React.FC = () => {
     setNotificationSession(sessionForReminder || null);
   }, [sessions]);
 
-  // Handle adding a new session with validations.
   const handleAddSession = () => {
     if (!newSessionStart || !newSessionEnd) return;
     const now = Date.now();
@@ -88,23 +79,21 @@ const StudyScheduler: React.FC = () => {
     const startDate = combineWithToday(newSessionStart);
     const endDate = combineWithToday(newSessionEnd);
 
-    // Constraint: Start time must be at least 1 minute in the future.
     if (startDate.getTime() <= now) {
       alert("Error: Session start time must be in the future (at least 1 minute from now).");
       return;
     }
-    // Constraint: Session must be scheduled for today.
     if (startDate.toDateString() !== today.toDateString()) {
       alert("Error: Session must be scheduled for today.");
       return;
     }
-    // Constraint: Duration must be between 30 and 120 minutes.
+
     const duration = endDate.getTime() - startDate.getTime();
     if (duration < 30 * 60 * 1000 || duration > 120 * 60 * 1000) {
       alert("Error: Session duration must be between 30 and 120 minutes.");
       return;
     }
-    // Constraint: Sessions must not overlap.
+
     const overlappingSession = sessions.find((session) => {
       return !(endDate.getTime() <= session.start || startDate.getTime() >= session.end);
     });
@@ -128,17 +117,14 @@ const StudyScheduler: React.FC = () => {
     setNewSessionEnd(null);
   };
 
-  // Schedule notification for the new session.
   const scheduleNotification = (session: Session) => {
     const now = Date.now();
     const timeUntilStart = session.start - now;
     if (timeUntilStart > 5 * 60 * 1000) {
-      // Set a timeout for 5 minutes before the session start.
       setTimeout(() => setNotificationSession(session), timeUntilStart - 5 * 60 * 1000);
     }
   };
 
-  // Handler when user accepts the notification.
   const handleNotificationOk = (sessionId: number) => {
     setSessions((prev) =>
       prev.map((session) =>
@@ -148,7 +134,6 @@ const StudyScheduler: React.FC = () => {
     setNotificationSession(null);
   };
 
-  // Handler for dismissing notification; counts up to 10 dismissals.
   const handleNotificationDismiss = (sessionId: number) => {
     setSessions((prev) =>
       prev.map((session) => {
@@ -165,14 +150,12 @@ const StudyScheduler: React.FC = () => {
     setNotificationSession(null);
   };
 
-  // Handler to remove all session history.
   const handleClearHistory = () => {
     if (window.confirm("Are you sure you want to clear all session history?")) {
       setSessions([]);
     }
   };
 
-  // Return background color based on session status.
   const getSessionColor = (status: Session['status']): string => {
     switch (status) {
       case 'completed':
@@ -231,7 +214,6 @@ const StudyScheduler: React.FC = () => {
         </Button>
       </div>
 
-      {/* Scheduling Dialog */}
       {showDialog && (
         <Dialog
           title="Schedule Session (Today Only)"
@@ -313,7 +295,6 @@ const StudyScheduler: React.FC = () => {
         </Dialog>
       )}
 
-      {/* Notification Reminder */}
       {notificationSession && (
         <Notification
           type={{ style: 'warning', icon: true }}
@@ -362,7 +343,6 @@ const StudyScheduler: React.FC = () => {
         </Notification>
       )}
 
-      {/* Session History in a well-styled container */}
       <div style={{
         marginTop: '2rem',
         backgroundColor: 'var(--window-bg)',

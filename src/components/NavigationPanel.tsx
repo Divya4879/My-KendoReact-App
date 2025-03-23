@@ -13,7 +13,7 @@ const NavigationPanel: React.FC<NavigationPanelProps> = ({ selectedView, onSelec
   const buttonRef = useRef<ButtonHandle>(null);
   const popupRef = useRef<HTMLDivElement>(null);
 
-  // Define the sections corresponding to your App.tsx
+  // Define the sections corresponding to your App
   const views = [
     { id: "topicGuide", label: "Topic Guide" },
     { id: "understandingTest", label: "Test & Thrive" },
@@ -35,7 +35,6 @@ const NavigationPanel: React.FC<NavigationPanelProps> = ({ selectedView, onSelec
     setShowPopup(false);
   };
 
-  // Close popup if clicking outside of the popup or the hamburger button.
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node;
@@ -80,7 +79,7 @@ const NavigationPanel: React.FC<NavigationPanelProps> = ({ selectedView, onSelec
           popupAlign={{ vertical: "bottom", horizontal: "left" }}
           style={{
             zIndex: 2000,
-            marginTop: "15rem", // Adjust this value to change vertical spacing
+            marginTop: "15rem", 
           }}
         >
           <div

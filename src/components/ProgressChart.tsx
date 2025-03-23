@@ -1,4 +1,3 @@
-// src/components/ProgressChart.tsx
 import React, { useState } from 'react';
 import {
   Chart,
@@ -9,21 +8,18 @@ import {
 } from '@progress/kendo-react-charts';
 import '@progress/kendo-theme-default/dist/all.css';
 
-// Utility function to get the current date in YYYY-MM-DD format
 const getCurrentDate = (): string => {
   const today = new Date();
   return today.toISOString().split('T')[0];
 };
 
-// Utility function to get the start of the current week (Monday)
 const getStartOfWeek = (): Date => {
   const today = new Date();
   const day = today.getDay();
-  const diff = today.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is Sunday
+  const diff = today.getDate() - day + (day === 0 ? -6 : 1); 
   return new Date(today.setDate(diff));
 };
 
-// Utility function to get the dates for the current week in YYYY-MM-DD
 const getWeekDates = (): string[] => {
   const startOfWeek = getStartOfWeek();
   const dates = [];
@@ -35,7 +31,6 @@ const getWeekDates = (): string[] => {
   return dates;
 };
 
-// Custom hook to manage localStorage
 function useLocalStorage<T>(key: string, initialValue: T): [T, React.Dispatch<React.SetStateAction<T>>] {
   const [storedValue, setStoredValue] = useState<T>(() => {
     try {
@@ -60,7 +55,6 @@ function useLocalStorage<T>(key: string, initialValue: T): [T, React.Dispatch<Re
   return [storedValue, setValue];
 }
 
-// Component to add a study session
 const AddStudySession: React.FC<{ onAddSession: (date: string, duration: number) => void }> = ({
   onAddSession,
 }) => {
@@ -151,16 +145,13 @@ const AddStudySession: React.FC<{ onAddSession: (date: string, duration: number)
   );
 };
 
-// Main component to display the progress chart
 const ProgressChart: React.FC = () => {
   const [sessions, setSessions] = useLocalStorage<{ date: string; duration: number }[]>('studySessions', []);
 
-  // Function to add a new study session
   const addSession = (date: string, duration: number) => {
     setSessions((prevSessions) => [...prevSessions, { date, duration }]);
   };
 
-  // Calculate total study time for each day of the current week
   const weekDates = getWeekDates();
   const weeklyData = weekDates.map((date) => {
     const dailySessions = sessions.filter((session) => session.date === date);
@@ -168,7 +159,6 @@ const ProgressChart: React.FC = () => {
     return { date, totalDuration };
   });
 
-  // Convert weekDates to Date objects for chart categories
   const categoryDates = weekDates.map((d) => new Date(d));
 
   return (
@@ -196,7 +186,6 @@ const ProgressChart: React.FC = () => {
           <ChartCategoryAxis>
             <ChartCategoryAxisItem
               categories={categoryDates}
-              // Format the labels to show only Month and Day, e.g. "Mar 22"
               labels={{
                 format: '{0:MMM dd}',
                 color: "#1b5e20",

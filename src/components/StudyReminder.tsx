@@ -7,7 +7,7 @@ import "@progress/kendo-theme-default/dist/all.css"
 
 interface Reminder {
   id: number
-  time: string // in "HH:mm" format
+  time: string 
   snoozeCount: number
 }
 
@@ -16,7 +16,7 @@ const MAX_SNOOZE_COUNT = 3
 const SNOOZE_DELAY_MS = 60000 // 1 minute
 
 const StudyReminder: React.FC = () => {
-  // State for reminders
+  
   const [reminders, setReminders] = useState<Reminder[]>([
     { id: 1, time: "", snoozeCount: 0 },
     { id: 2, time: "", snoozeCount: 0 },
@@ -25,25 +25,23 @@ const StudyReminder: React.FC = () => {
   const [showPopup, setShowPopup] = useState(false)
   const [activeReminder, setActiveReminder] = useState<Reminder | null>(null)
 
-  // Refs to hold timer IDs so we can clear and reschedule if needed
   const reminderTimers = useRef<{ [key: number]: number }>({})
 
-  // Load saved reminders on mount
   useEffect(() => {
     try {
-      // Try to load reminder 1
+      // load reminder 1
       const storedTime1 = localStorage.getItem("reminderTime1")
       if (storedTime1) {
         setReminders((prev) => prev.map((r) => (r.id === 1 ? { ...r, time: storedTime1 } : r)))
       }
 
-      // Try to load reminder 2
+      // load reminder 2
       const storedTime2 = localStorage.getItem("reminderTime2")
       if (storedTime2) {
         setReminders((prev) => prev.map((r) => (r.id === 2 ? { ...r, time: storedTime2 } : r)))
       }
 
-      // Try to load reminder 3
+      // load reminder 3
       const storedTime3 = localStorage.getItem("reminderTime3")
       if (storedTime3) {
         setReminders((prev) => prev.map((r) => (r.id === 3 ? { ...r, time: storedTime3 } : r)))
@@ -53,50 +51,43 @@ const StudyReminder: React.FC = () => {
     }
   }, [])
 
-  // Schedule reminders whenever they change
   useEffect(() => {
-    // Clear all existing timers
+    
     Object.values(reminderTimers.current).forEach((timerId) => clearTimeout(timerId))
     reminderTimers.current = {}
 
-    // Schedule all reminders
+    
     reminders.forEach((reminder) => {
       if (reminder.time) {
         scheduleDailyReminder(reminder)
       }
     })
 
-    // Cleanup on unmount: clear any scheduled timeouts
     return () => {
       Object.values(reminderTimers.current).forEach((timerId) => clearTimeout(timerId))
     }
   }, [reminders])
 
-  // Helper: Combine today's date with the given time (HH:mm)
   const combineWithToday = (timeStr: string): Date => {
     const [hours, minutes] = timeStr.split(":").map(Number)
     const now = new Date()
     return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0)
   }
 
-  // Helper: Calculate next occurrence for the given time (if today passed, schedule tomorrow)
   const getNextOccurrence = (timeStr: string): Date => {
     const reminderDate = combineWithToday(timeStr)
     const now = new Date()
 
     if (reminderDate <= now) {
-      // If the time today has passed, add one day
       reminderDate.setDate(reminderDate.getDate() + 1)
     }
 
     return reminderDate
   }
 
-  // Function to schedule a daily reminder
   const scheduleDailyReminder = (reminder: Reminder) => {
     if (!reminder.time) return
 
-    // Clear any existing timer for this reminder
     if (reminderTimers.current[reminder.id]) {
       clearTimeout(reminderTimers.current[reminder.id])
     }
@@ -104,7 +95,6 @@ const StudyReminder: React.FC = () => {
     const nextReminder = getNextOccurrence(reminder.time)
     const now = new Date()
 
-    // Subtract 10 seconds to trigger slightly before the actual time
     const timeout = nextReminder.getTime() - now.getTime() - 10000
 
     if (timeout <= 0) {
@@ -112,14 +102,12 @@ const StudyReminder: React.FC = () => {
       return
     }
 
-    // Schedule the reminder
     reminderTimers.current[reminder.id] = window.setTimeout(() => {
       setActiveReminder(reminder)
       setShowPopup(true)
     }, timeout)
   }
 
-  // Handler for time input changes
   const handleTimeChange1 = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTime = e.target.value
     setReminders((prev) => prev.map((r) => (r.id === 1 ? { ...r, time: newTime } : r)))
@@ -135,39 +123,30 @@ const StudyReminder: React.FC = () => {
     setReminders((prev) => prev.map((r) => (r.id === 3 ? { ...r, time: newTime } : r)))
   }
 
-  // Handler to set/update a reminder
   const handleSetReminder = (id: number) => {
     const reminder = reminders.find((r) => r.id === id)
     if (reminder && reminder.time) {
-      // Save to localStorage
       localStorage.setItem(`reminderTime${id}`, reminder.time)
 
-      // Schedule the reminder
       scheduleDailyReminder(reminder)
     }
   }
 
-  // Handler to delete a reminder
   const handleDeleteReminder = (id: number) => {
     if (reminderTimers.current[id]) {
       clearTimeout(reminderTimers.current[id])
     }
 
-    // Remove from localStorage
     localStorage.removeItem(`reminderTime${id}`)
 
-    // Update state
     setReminders((prev) => prev.map((reminder) => (reminder.id === id ? { ...reminder, time: "" } : reminder)))
   }
 
-  // Handlers for reminder actions
   const handleStartSession = () => {
     if (!activeReminder) return
 
-    // Close the popup
     setShowPopup(false)
 
-    // Reset snooze count and reschedule for tomorrow
     setReminders((prev) =>
       prev.map((reminder) => (reminder.id === activeReminder.id ? { ...reminder, snoozeCount: 0 } : reminder)),
     )
@@ -178,10 +157,8 @@ const StudyReminder: React.FC = () => {
   const handleCancelForToday = () => {
     if (!activeReminder) return
 
-    // Close the popup
     setShowPopup(false)
 
-    // Reset snooze count (it will automatically reschedule for tomorrow)
     setReminders((prev) =>
       prev.map((reminder) => (reminder.id === activeReminder.id ? { ...reminder, snoozeCount: 0 } : reminder)),
     )
@@ -192,10 +169,8 @@ const StudyReminder: React.FC = () => {
   const handleSnooze = () => {
     if (!activeReminder) return
 
-    // Close the popup
     setShowPopup(false)
 
-    // Increment snooze count
     const updatedReminder = {
       ...activeReminder,
       snoozeCount: Math.min(activeReminder.snoozeCount + 1, MAX_SNOOZE_COUNT),
@@ -203,9 +178,7 @@ const StudyReminder: React.FC = () => {
 
     setReminders((prev) => prev.map((reminder) => (reminder.id === activeReminder.id ? updatedReminder : reminder)))
 
-    // If we haven't reached max snooze count, schedule a snooze
     if (updatedReminder.snoozeCount < MAX_SNOOZE_COUNT) {
-      // Schedule a new reminder in 1 minute
       setTimeout(() => {
         setActiveReminder(updatedReminder)
         setShowPopup(true)
@@ -214,8 +187,6 @@ const StudyReminder: React.FC = () => {
 
     setActiveReminder(null)
   }
-
-  // Get the time value for each reminder
   const reminderTime1 = reminders.find((r) => r.id === 1)?.time || ""
   const reminderTime2 = reminders.find((r) => r.id === 2)?.time || ""
   const reminderTime3 = reminders.find((r) => r.id === 3)?.time || ""
@@ -240,7 +211,6 @@ const StudyReminder: React.FC = () => {
         Daily Study Cue
       </h1>
 
-      {/* Outer container for reminders */}
       <div
         style={{
           backgroundColor: "#f1f8e9",
@@ -250,7 +220,6 @@ const StudyReminder: React.FC = () => {
           boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
         }}
       >
-        {/* Reminder 1 */}
         <div
           style={{
             marginBottom: "1rem",
@@ -308,7 +277,6 @@ const StudyReminder: React.FC = () => {
           )}
         </div>
 
-        {/* Reminder 2 */}
         <div
           style={{
             marginBottom: "1rem",
@@ -366,7 +334,6 @@ const StudyReminder: React.FC = () => {
           )}
         </div>
 
-        {/* Reminder 3 */}
         <div
           style={{
             marginBottom: "1rem",
@@ -425,7 +392,6 @@ const StudyReminder: React.FC = () => {
         </div>
       </div>
 
-      {/* POPUP MODAL */}
       {showPopup && activeReminder && (
         <div
           style={{

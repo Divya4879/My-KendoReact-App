@@ -1,6 +1,6 @@
 // This file contains functions to call the Groq AI API.
 export const evaluateUnderstanding = async (text: string): Promise<string> => {
-    // Replace with your actual API endpoint and secure API key.
+    
     const apiUrl = "https://api.groq.com/openai/v1/chat/completions";
     const apiKey = process.env.REACT_APP_GROQ_AI_API_KEY;; 
   
@@ -8,7 +8,6 @@ export const evaluateUnderstanding = async (text: string): Promise<string> => {
       throw new Error("Groq AI API URL or API key is not defined.");
     }
   
-    // Construct a prompt to perform SWOT analysis and provide detailed feedback.
     const prompt = `Evaluate the following explanation of a topic using SWOT analysis.
   Provide detailed feedback including:
   - **Strengths:** What are the strong points of this explanation?
@@ -21,7 +20,7 @@ export const evaluateUnderstanding = async (text: string): Promise<string> => {
   ${text}`;
   
     const payload = {
-      model: "llama3-8b-8192", // Using a free-tier model
+      model: "llama3-8b-8192", 
       messages: [
         {
           role: "user",
@@ -46,7 +45,6 @@ export const evaluateUnderstanding = async (text: string): Promise<string> => {
     }
   
     const data = await response.json();
-    // Assumes the API returns the evaluation in data.choices[0].message.content
     return data?.choices?.[0]?.message?.content || "";
   };
   

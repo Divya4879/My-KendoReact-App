@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { DropDownList, DropDownListChangeEvent } from '@progress/kendo-react-dropdowns';
 import { Input, InputChangeEvent } from '@progress/kendo-react-inputs';
 import { Button } from '@progress/kendo-react-buttons';
 import { Label } from "@progress/kendo-react-labels";
 import { ProgressBar } from "@progress/kendo-react-progressbars";
+import { Popup } from '@progress/kendo-react-popup';
 
 interface AcademicLevel {
   id: string;
@@ -19,12 +20,7 @@ const academicLevels: AcademicLevel[] = [
   { id: 'competitive', name: 'Competitive Exam' }
 ];
 
-/**
- * Calls the Groq AI API to generate a detailed explanation.
- * This version uses simulated progress.
- */
 const generateTopicExplanation = async (topic: string, level: string): Promise<string> => {
-  // Replace with your actual endpoint and secure API key.
   const apiUrl = "https://api.groq.com/openai/v1/chat/completions";
   const apiKey = process.env.REACT_APP_GROQ_AI_API_KEY;
 
@@ -38,7 +34,7 @@ Please generate a comprehensive, long-form explanation that starts with a detail
 The response should be engaging, informative, and thorough so that the user gains a deep understanding and feels confident in mastering the topic.`;
 
   const payload = {
-    model: "llama3-8b-8192", // Replace with the correct model per your API docs
+    model: "llama3-8b-8192", 
     messages: [
       { role: "user", content: prompt }
     ],
@@ -59,12 +55,10 @@ The response should be engaging, informative, and thorough so that the user gain
     throw new Error(`Failed to generate explanation from Groq AI API: ${errorText}`);
   }
 
-  // Simply wait for the full response (simulate progress)
   const data = await response.json();
   return data?.choices?.[0]?.message?.content || '';
 };
 
-// Helper function to replace **text** with a styled span.
 const formatExplanation = (text: string): string => {
   return text
     .replace(/\*\*(.*?)\*\*/g, '<span style="font-size:150%; font-weight:bold;">$1</span>')
@@ -74,9 +68,11 @@ const formatExplanation = (text: string): string => {
 const TopicGuide: React.FC = () => {
   const [selectedLevel, setSelectedLevel] = useState<AcademicLevel>(academicLevels[0]);
   const [topicName, setTopicName] = useState<string>('');
-  const [explanation, setExplanation] = useState<string>(''); // Initially empty
+  const [explanation, setExplanation] = useState<string>(''); 
   const [loading, setLoading] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
+  const [showPopup, setShowPopup] = useState<boolean>(false);
+  const [popupMessage, setPopupMessage] = useState<string>('');
 
   const handleLevelChange = (e: DropDownListChangeEvent) => {
     setSelectedLevel(e.target.value as AcademicLevel);
@@ -88,14 +84,15 @@ const TopicGuide: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!topicName.trim()) {
-      alert('Please enter a topic name.');
+    if (!topicName.trim() || !selectedLevel) {
+      setPopupMessage("Please provide a topic name and select an academic level.");
+      setShowPopup(true);
       return;
     }
     setLoading(true);
     setProgress(0);
 
-    // Simulate progress: increment by 5 every 300ms up to 95%
+    // Simulate progress: increment by 10 every 200ms up to 95%
     const timer = setInterval(() => {
       setProgress(prev => (prev < 95 ? prev + 10 : prev));
     }, 200);
@@ -158,14 +155,12 @@ const TopicGuide: React.FC = () => {
         </div>
       </form>
 
-      {/* Simulated ProgressBar */}
       {loading && (
         <div style={{ marginBottom: '1rem' }}>
-          <ProgressBar value={progress} style={{ backgroundColor: 'green'}} />
+          <ProgressBar value={progress} style={{ backgroundColor: 'green' }} />
         </div>
       )}
 
-      {/* Explanation Container with Close Button */}
       <div
         style={{
           position: 'relative',
@@ -207,9 +202,33 @@ const TopicGuide: React.FC = () => {
           </>
         )}
       </div>
+
+      {showPopup && (
+        <Popup
+          anchor={document.body}
+          show={showPopup}
+          popupClass="k-popup-transparent"
+          style={{
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            zIndex: 9999,
+            padding: '1rem',
+            background: 'white',
+            border: '1px solid #ccc',
+            borderRadius: '8px',
+            boxShadow: '0px 0px 10px rgba(0,0,0,0.25)'
+          }}
+        >
+          <div>
+            <p>{popupMessage}</p>
+            <Button onClick={() => setShowPopup(false)}>Close</Button>
+          </div>
+        </Popup>
+      )}
     </div>
   );
 };
 
 export default TopicGuide;
-

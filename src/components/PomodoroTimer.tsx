@@ -11,12 +11,10 @@ const PomodoroTimer: React.FC = () => {
   const [timeLeft, setTimeLeft] = useState<number>(25 * 60);
   const [isActive, setIsActive] = useState<boolean>(false);
   
-  // Reference for audio element
   const audioRef = useRef<HTMLAudioElement | null>(null);
   // Timer reference (using window.setInterval returns a number)
   const timerRef = useRef<number | null>(null);
 
-  // Timer effect: update every second when active
   useEffect(() => {
     let interval: number | null = null;
     if (isActive && timeLeft > 0) {
@@ -37,7 +35,6 @@ const PomodoroTimer: React.FC = () => {
     };
   }, [isActive, timeLeft]);
 
-  // Control audio playback when the active state changes
   useEffect(() => {
     if (audioRef.current) {
       if (isActive) {
@@ -65,7 +62,6 @@ const PomodoroTimer: React.FC = () => {
   };
 
   const handleDurationChange = (e: NumericTextBoxChangeEvent) => {
-    // e.value is number | null; default to 25 if null.
     const value = e.value !== null ? e.value : 25;
     if (value >= 25 && value <= 120) {
       const newDuration = value * 60;
@@ -80,13 +76,12 @@ const PomodoroTimer: React.FC = () => {
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   };
 
-  // Calculate percentage for the circular progress bar.
   const percentage = ((duration - timeLeft) / duration) * 100;
 
   return (
     <div style={{ textAlign: 'center', padding: '20px' }}>
       <h1>Pomodoro Timer</h1>
-      {/* Circular Progress Indicator */}
+
       <div style={{ width: '200px', height: '200px', margin: '0 auto' }}>
         <CircularProgressbar
           value={percentage}
@@ -98,7 +93,7 @@ const PomodoroTimer: React.FC = () => {
           })}
         />
       </div>
-      {/* Duration Input */}
+
       <div style={{ marginTop: '20px'}}>
         <NumericTextBox
           value={duration / 60}
@@ -112,7 +107,7 @@ const PomodoroTimer: React.FC = () => {
         />
         <span style={{ marginLeft: '10px' }}>minutes</span>
       </div>
-      {/* Control Buttons */}
+
       <div style={{ marginTop: '20px' }}>
         <Button
         style={{
@@ -135,7 +130,7 @@ const PomodoroTimer: React.FC = () => {
           Reset
         </Button>
       </div>
-      {/* Audio Element */}
+
       <audio ref={audioRef} src="/pomodoro.mp3" loop />
     </div>
   );
