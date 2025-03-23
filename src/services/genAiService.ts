@@ -2,7 +2,7 @@
 export const evaluateUnderstanding = async (text: string): Promise<string> => {
     // Replace with your actual API endpoint and secure API key.
     const apiUrl = "https://api.groq.com/openai/v1/chat/completions";
-    const apiKey = "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"; 
+    const apiKey = process.env.REACT_APP_GROQ_AI_API_KEY;; 
   
     if (!apiUrl || !apiKey) {
       throw new Error("Groq AI API URL or API key is not defined.");
